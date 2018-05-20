@@ -11,6 +11,10 @@ sem_t patientReady;
 
 int numberOfFreeWRSeats = 0;
 
+struct patients {
+    int patientNum;
+};
+
 void* Dentist(void* arg) {
 
     while(true) {
@@ -40,9 +44,11 @@ void* Dentist(void* arg) {
 }
 
 void* Customer(void * arg) {
-    int threadID =  pthread_self();
+    struct patients *tempStruct = (struct patients) ptr;
+    int threadID =  tempStruct->patientNum;
 
     while(true) {
+        //Waitinf for a free seat
         cout << "“Customer " << threadID << "trying to acquire seatCountWriteAccess…" << endl;
         sem_wait(&seatCountWriteAccess);
 
@@ -90,13 +96,32 @@ int main() {
     sem_init(&seatCountWriteAccess, 0, 1);
     sem_init(&patientReady, 0, 1);
     numberOfFreeWRSeats = 5;
+    int PATIENT_THREAD_NUM = 5;
 
-    pthread_t t1, t2;
-    pthread_create(&t1, NULL, thread, NULL);
+    pthread_t thread[PATIENT_THREAD_NUM];
 
-    pthread_create(&t2, NULL, thread, NULL);
-    pthread_join(t1, NULL);
-    pthread_join(t2, NULL);
+    for(int i=0; i < PATIENT_THREAD_NUM; i++) {
+        /* Dynamic allocation of struct to pass data */
+        struct patients *tempStruct = new struct patients;
+        tempStruct->patientNum = i;
+
+        /*  Pass struct through threads */
+        int status = pthread_create(&thread[i], NULL, Customer, (void*) tempStruct);
+
+        /* If there is an error in creating a thread, exit */
+        if(status) {
+            string err = "Error when creating thread #" + (to_string(i));
+            printf("\n"err"\n");
+            exit(1);
+        }
+
+    }
+
+    /* Join all the threads */
+    for(int i=0; i < PATIENT_THREAD_NUM; i++) {
+        pthread_join(thread[i], NULL);
+    }
+    
     sem_destroy(&mutex);
 
 
