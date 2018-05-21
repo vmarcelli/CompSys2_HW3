@@ -14,12 +14,17 @@ sem_t patientReady;
 
 int numberOfFreeWRSeats = 0;
 
+/*
+ * Struct that will be passed through to keep track of the
+ * patient number 
+ */
 struct patients_t {
     int patientNum;
 };
 
 void* Dentist(void* arg) {
 
+    /* General print statements */
     string dentistAquiring = "Dentist trying to acquire patient…";
     string dentistAquiringSeat = "Dentist trying to acquire seatCountWriteAccess…";
     string dentistReadyConsult = "Dentist ready to consult…";
@@ -27,6 +32,7 @@ void* Dentist(void* arg) {
     string dentistConsulting = "Dentist consulting patient…";
 
     while(true) {
+        //Get patient
         printf("%s\n", dentistAquiring.c_str());
         sem_wait(&patientReady);
         printf("%s\n", dentistAquiringSeat.c_str());
@@ -62,6 +68,7 @@ void* Customer(void* arg) {
 
         //Free seats still left
         if(numberOfFreeWRSeats > 0) {
+            //Remove 1 seat
             numberOfFreeWRSeats -= 1;
             string customerSeated = "Customer " + to_string(threadID) 
                 + " seated; Remaining chairs=" + to_string(numberOfFreeWRSeats);
@@ -95,17 +102,20 @@ void* Customer(void* arg) {
 }
 
 int main(int argc, char* argv[]) {
+    //Create Sempahores
     sem_init(&dentistReady, 0, 1);
     sem_init(&seatCountWriteAccess, 0, 1);
     sem_init(&patientReady, 0, 1);
+    
+    /* Convert command line arguements to work with program */
     stringstream stream(argv[1]);
     stream >> numberOfFreeWRSeats;
-
     stringstream stream2(argv[2]);
     int argInput2 = 0;
     stream2 >> argInput2;
     const int PATIENT_THREAD_NUM = argInput2;
 
+    /* Create Threads */
     pthread_t *thread = new pthread_t[PATIENT_THREAD_NUM];
     pthread_t dentistThread;
 
@@ -141,7 +151,7 @@ int main(int argc, char* argv[]) {
     }
     pthread_join(dentistThread, NULL);
     
-    /* Destory Semaphores */
+    /* Destroy Semaphores */
     sem_destroy(&dentistReady);
     sem_destroy(&seatCountWriteAccess);
     sem_destroy(&patientReady);
