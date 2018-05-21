@@ -7,11 +7,13 @@
 
 using namespace std;
 
+/* Global Semaphores */
 sem_t mutex;
 sem_t dentistReady;
 sem_t seatCountWriteAccess;
 sem_t patientReady;
 
+//Number of free seats
 int numberOfFreeWRSeats = 0;
 
 /*
