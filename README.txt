@@ -1,11 +1,11 @@
 Valerio Marcelli
-vowels.cpp
-Assignment1
+hw3.cpp
+Assignment3
 
 == Instructions for Running vowels.cpp in a Linux Environment ==
 1.	Compiling the code
-	Making sure that you are in the same directory as vowels.cpp enter the following command
-	g++ vowels.cpp -lpthread -o program
+	Making sure that you are in the same directory as hw3.cpp enter the following command
+	g++ hw3.cpp -lpthread -lrt -o program
 	This will add an .exe file in your directory named program. 
 	If you wish, you may replace ‘program’ with any name that you want to name the .exe file as. 
 	
@@ -17,25 +17,25 @@ Assignment1
 2.	Running the program
 	For this instruction we’ll assume you kept the name program for the .exe, otherwise use whatever name you assigned.
 	To run the program type in the following
-	./program “stringofdirectorypath”
-	The first part is your .exe being told to run, what follows should be a 
-	string that leads to the directory which contains file1.txt – file20.txt.
-	PLEASE USE QUOTES WHEN TYPING IN THE DIRECTORY PATH
-	Your command line argument must be in the form of a string input, otherwise the program will not run!
+	./program [Number of seats] [Number of patients]
+	The first part is your .exe being told to run, what follows should two numbers seperated by
+	a single space.
+	Your command line arguments must be in the form of an integer input, otherwise the program will not run!
 	
 	A correct example would be:
-	./program “C:/Documents/User/Person/Folder/subfolder”
+	./program 5 4
 	
 	Incorrect examples are as follows:
-	./program “C:\using\backslash\instead\of\forwardslash”
-	./program C:/Not/using/quotes
+	./program five .3
+	./program 0.2 23.4
 
 3.	Using the program
 	Everything in the program is automated after this. 
 	Sit back and watch the numbers print out on the screen!
+	Once you are done, press Ctrl + C to exit the program
 
 == Assumptions on program use ==
-This program is assuming that there are 20 files named file1.txt to file20.txt in the directory that you provide. 
-This program will look for these files, and if not found will not function correctly. 
-It further assumes that each file contains at least one line of writing in them. 
+This programs assumes that you are using correct inputs for the command line
+arguements and that you already know that the only way to exit is through 
+Ctrl + C. 
 Lastly, it assumes that you’ve followed the instructions in this READ-ME file. 
